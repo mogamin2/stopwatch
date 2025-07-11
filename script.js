@@ -21,7 +21,7 @@ function formatTime(time) {
     const hours = String(date.getUTCHours()).padStart(2, '0');
     const minutes = String(date.getUTCMinutes()).padStart(2, '0');
     const seconds = String(date.getUTCSeconds()).padStart(2, '0');
-    const milliseconds = String(date.getUTCMilliseconds()).padStart(3, '0');
+    const milliseconds = Math.floor(date.getUTCMilliseconds() / 100);
     return `${hours}:${minutes}:${seconds}.${milliseconds}`;
 }
 
@@ -33,14 +33,6 @@ function formatDateTime(date) {
     const minutes = String(date.getMinutes()).padStart(2, '0');
     const seconds = String(date.getSeconds()).padStart(2, '0');
     return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
-}
-
-function formatDuration(time) {
-    const hours = Math.floor(time / 3600000);
-    const minutes = Math.floor((time % 3600000) / 60000);
-    const seconds = Math.floor((time % 60000) / 1000);
-    const milliseconds = String(time % 1000).padStart(3, '0');
-    return ` -- ${hours}h ${minutes}m ${seconds}s ${milliseconds}ms`;
 }
 
 function addHistory(text) {
@@ -58,7 +50,7 @@ function startStop() {
         startStopBtn.textContent = 'Start';
 
         const now = new Date();
-        addHistory(`Stop:  ${formatDateTime(now)} - ${formatTime(elapsedTime)}${formatDuration(elapsedTime)}`);
+        addHistory(`Stop:  ${formatDateTime(now)} - ${formatTime(elapsedTime)}`);
 
         elapsedTime = 0; // Reset for next start
         stopwatchDisplay.textContent = formatTime(elapsedTime);
@@ -74,7 +66,7 @@ function startStop() {
         startStopBtn.textContent = 'Stop';
 
         const now = new Date();
-        addHistory(`Start: ${formatDateTime(now)} - 00:00:00.000`);
+        addHistory(`Start: ${formatDateTime(now)} - ${formatTime(0)}`);
     }
 }
 
