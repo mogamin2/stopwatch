@@ -35,9 +35,10 @@ function formatDateTime(date) {
     return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
 }
 
-function addHistory(text) {
+function addHistory(text, type) {
     const historyItem = document.createElement('p');
     historyItem.textContent = text;
+    historyItem.classList.add(type);
     historyLog.appendChild(historyItem);
     historyLog.scrollTop = historyLog.scrollHeight; // Auto-scroll to bottom
 }
@@ -50,15 +51,17 @@ function startStop() {
         startStopBtn.textContent = 'Start';
 
         const now = new Date();
-        addHistory(`Stop:  ${formatDateTime(now)} - ${formatTime(elapsedTime)}`);
-
-        elapsedTime = 0; // Reset for next start
-        stopwatchDisplay.textContent = formatTime(elapsedTime);
+        addHistory(`Stop:  ${formatDateTime(now)} - ${formatTime(elapsedTime)}`, 'history-stop');
 
     } else {
         // Start the stopwatch
         running = true;
-        startTime = Date.now() - elapsedTime;
+        
+        // Reset timer and display right before starting
+        elapsedTime = 0;
+        stopwatchDisplay.textContent = formatTime(elapsedTime);
+
+        startTime = Date.now();
         stopwatchInterval = setInterval(() => {
             elapsedTime = Date.now() - startTime;
             stopwatchDisplay.textContent = formatTime(elapsedTime);
@@ -66,7 +69,7 @@ function startStop() {
         startStopBtn.textContent = 'Stop';
 
         const now = new Date();
-        addHistory(`Start: ${formatDateTime(now)} - ${formatTime(0)}`);
+        addHistory(`Start: ${formatDateTime(now)} - ${formatTime(0)}`, 'history-start');
     }
 }
 
