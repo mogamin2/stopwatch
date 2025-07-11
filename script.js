@@ -43,6 +43,13 @@ function formatDuration(time) {
     return ` -- ${hours}h ${minutes}m ${seconds}s ${milliseconds}ms`;
 }
 
+function addHistory(text) {
+    const historyItem = document.createElement('p');
+    historyItem.textContent = text;
+    historyLog.appendChild(historyItem);
+    historyLog.scrollTop = historyLog.scrollHeight; // Auto-scroll to bottom
+}
+
 function startStop() {
     if (running) {
         // Stop the stopwatch
@@ -51,17 +58,15 @@ function startStop() {
         startStopBtn.textContent = 'Start';
 
         const now = new Date();
-        const historyItem = document.createElement('p');
-        historyItem.textContent = `Stop:  ${formatDateTime(now)} - ${formatTime(elapsedTime)}${formatDuration(elapsedTime)}`;
-        historyLog.appendChild(historyItem);
+        addHistory(`Stop:  ${formatDateTime(now)} - ${formatTime(elapsedTime)}${formatDuration(elapsedTime)}`);
 
         elapsedTime = 0; // Reset for next start
+        stopwatchDisplay.textContent = formatTime(elapsedTime);
 
     } else {
         // Start the stopwatch
         running = true;
         startTime = Date.now() - elapsedTime;
-        stopwatchDisplay.textContent = formatTime(elapsedTime);
         stopwatchInterval = setInterval(() => {
             elapsedTime = Date.now() - startTime;
             stopwatchDisplay.textContent = formatTime(elapsedTime);
@@ -69,13 +74,18 @@ function startStop() {
         startStopBtn.textContent = 'Stop';
 
         const now = new Date();
-        const historyItem = document.createElement('p');
-        historyItem.textContent = `Start: ${formatDateTime(now)} - 00:00:00.000`;
-        historyLog.appendChild(historyItem);
+        addHistory(`Start: ${formatDateTime(now)} - 00:00:00.000`);
     }
 }
 
 startStopBtn.addEventListener('click', startStop);
+
+window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') {
+        e.preventDefault(); // Prevent page scroll
+        startStopBtn.click();
+    }
+});
 
 setInterval(updateCurrentTime, 1000);
 updateCurrentTime();

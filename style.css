@@ -4,18 +4,21 @@ body {
     font-family: 'Courier New', Courier, monospace;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* Align to the top */
     height: 100vh;
     margin: 0;
+    padding-top: 5vh; /* Add some padding at the top */
 }
 
 .container {
     text-align: center;
+    width: 50vw; /* Adjust container width */
 }
 
 .time-display {
-    font-size: 4rem;
+    font-size: 5rem;
     margin-bottom: 20px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 .stopwatch-display {
@@ -44,14 +47,24 @@ body {
     cursor: not-allowed;
 }
 
-.history-log {
+.history-section {
     margin-top: 40px;
     text-align: left;
 }
 
-.history-log h2 {
+.history-section h2 {
     font-size: 2rem;
     margin-bottom: 10px;
+    padding-left: 10px; /* Align with log content */
+}
+
+.history-log {
+    width: 100%;
+    max-height: 45vh; /* Increase max height */
+    overflow-y: auto; /* Add a scrollbar when content overflows */
+    border: 1px solid #333;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 .history-log p {
